@@ -1,26 +1,30 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONValue;
 
 public class PwSafe {
-    private ArrayList<String> data = new ArrayList<String>();
+    private ArrayList<EncryptedP> data;
 
-    public void loadFile(Path file){
-            try (BufferedReader in = Files.newBufferedReader(file, Charset.forName("UTF-8"));
-            ) {
-                String line;
-                while ((line = in.readLine()) != null) {
-                    if (line.charAt(0)=='e') {
-                        data.add(line);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+    public void readSafe () {
+        try {
+            for (Object o : (JSONArray) JSONValue.parse(Files.readString(Paths.get("../pwsafe.pw")))) {
+                data.add((EncryptedP) o);
             }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void writeSafe () {
+        String safeString = JSONValue.toJSONString(data);
+        try {
+            Files.writeString(Paths.get("../pwsafe.pw"), safeString, StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
