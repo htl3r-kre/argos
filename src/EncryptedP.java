@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EncryptedP {
     protected String value;
@@ -9,9 +10,7 @@ public class EncryptedP {
             this.value = args[0];
             this.userName = args[1];
             tags = new ArrayList<>();
-            for (int i = 2; i < args.length - 1; i++) {
-                tags.add(args[i]);
-            }
+            tags.addAll(Arrays.asList(args).subList(2, args.length - 1));
         }
     }
 }
