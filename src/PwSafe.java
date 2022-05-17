@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
 
@@ -10,8 +11,20 @@ import org.json.simple.JSONValue;
  * A class to store {@link EncryptedP}asswords
  */
 public class PwSafe {
+    /**
+     * Stores the passwords in an arraylist
+     */
     private ArrayList<EncryptedP> data;
     private String path = "../pwsafe.pw";
+
+    /**
+     * Creates a safe from {@link EncryptedP}asswords
+     * @param inputPws the {@link EncryptedP}asswords to be added to the safe
+     */
+    public PwSafe(EncryptedP... inputPws){
+        data = new ArrayList<>();
+        Collections.addAll(this.data, inputPws);
+    }
 
     /**
      * adds a password to the safe list ({@link PwSafe#data})
