@@ -3,15 +3,52 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
 
+/**
+ * A class to store {@link EncryptedP}asswords
+ */
 public class PwSafe {
+    /**
+     * Stores the passwords in an arraylist
+     */
     private ArrayList<EncryptedP> data;
+    private String path = "../pwsafe.pw";
 
+    /**
+     * Creates a safe from {@link EncryptedP}asswords
+     * @param inputPws the {@link EncryptedP}asswords to be added to the safe
+     */
+    public PwSafe(EncryptedP... inputPws){
+        data = new ArrayList<>();
+        Collections.addAll(this.data, inputPws);
+    }
+
+    /**
+     * adds a password to the safe list ({@link PwSafe#data})
+     * @param pw type: {@link EncryptedP}; the password, which is added
+     * @return true if the password was set successfully
+     */
+    public boolean addPw (EncryptedP pw) {
+        return data.add(pw);
+    }
+
+    /**
+     * sets the path for the safe
+     * @param path the path where the safe should be located
+     */
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    /**
+     * reads the safe from a file at {@link PwSafe#path} (with JSON)
+     */
     public void readSafe () {
         try {
-            for (Object o : (JSONArray) JSONValue.parse(Files.readString(Paths.get("../pwsafe.pw")))) {
+            for (Object o : (JSONArray) JSONValue.parse(Files.readString(Paths.get(path)))) {
                 data.add((EncryptedP) o);
             }
         } catch (IOException e){
@@ -19,6 +56,9 @@ public class PwSafe {
         }
     }
 
+    /**
+     * writes the safe to a file at {@link PwSafe#path}
+     */
     public void writeSafe () {
         String safeString = JSONValue.toJSONString(data);
         try {
