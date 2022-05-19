@@ -4,8 +4,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONValue;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * A class to store {@link EncryptedP}asswords
@@ -48,9 +50,7 @@ public class PwSafe {
      */
     public void readSafe () {
         try {
-            for (Object o : (JSONArray) JSONValue.parse(Files.readString(Paths.get(path)))) {
-                data.add((EncryptedP) o);
-            }
+            data = new Gson().fromJson(Files.readString(Paths.get(path)), new TypeToken<ArrayList<EncryptedP>>(){}.getType());
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -60,11 +60,20 @@ public class PwSafe {
      * writes the safe to a file at {@link PwSafe#path}
      */
     public void writeSafe () {
-        String safeString = JSONValue.toJSONString(data);
+        String safeString = new Gson().toJson(data);
+        System.out.println(safeString);
         try {
-            Files.writeString(Paths.get("../pwsafe.pw"), safeString, StandardOpenOption.CREATE);
+            Files.writeString(Paths.get(path), safeString, StandardOpenOption.CREATE);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "PwSafe{" +
+                "data=" + data +
+                ", at path='" + path + '\'' +
+                '}';
     }
 }
