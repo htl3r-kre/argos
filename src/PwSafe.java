@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -63,6 +64,16 @@ public class PwSafe {
         System.out.println(safeString);
         try {
             Files.writeString(Paths.get(path), safeString, StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeSafe (String pathArg) {
+        String safeString = new Gson().toJson(data);
+        System.out.println(safeString);
+        try {
+            Files.writeString(Paths.get(pathArg), safeString, StandardOpenOption.CREATE);
         } catch (IOException e) {
             e.printStackTrace();
         }
