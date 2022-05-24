@@ -27,4 +27,13 @@ public class Encryptor {
         String b64 = new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
         return b64;
     }
+
+    public static String decrypt (String encryptedText, String keyHash) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+        SecretKey key = new SecretKeySpec(MessageDigest.getInstance("SHA-256").digest(keyHash.getBytes(StandardCharsets.UTF_8)), "AES");
+        Cipher cipher = Cipher.getInstance(alg);
+        cipher.init(Cipher.DECRYPT_MODE, key, ivspec);
+        byte[] bytes = cipher.doFinal(encryptedText.getBytes(StandardCharsets.UTF_8));
+        String b64 = new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
+        return b64;
+    }
 }
