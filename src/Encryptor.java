@@ -12,28 +12,26 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class Encryptor {
-    private static final IvParameterSpec ivspec = new IvParameterSpec(new byte[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, });
+    private static final IvParameterSpec ivspec = new IvParameterSpec(new byte[16]);
     private static final String alg = "AES/CBC/PKCS5Padding";
 
     public static String hash (String input){
         return DigestUtils.sha256Hex(input);
     }
 
-    public static String encrypt (String clearText, String keyHash) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+    public static String encrypt (String clearText, String keyHash) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
         SecretKey key = new SecretKeySpec(MessageDigest.getInstance("SHA-256").digest(keyHash.getBytes(StandardCharsets.UTF_8)), "AES");
         Cipher cipher = Cipher.getInstance(alg);
         cipher.init(Cipher.ENCRYPT_MODE, key, ivspec);
         byte[] bytes = cipher.doFinal(clearText.getBytes(StandardCharsets.UTF_8));
-        String b64 = new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
-        return b64;
+        return new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
     }
 
-    public static String decrypt (String encryptedText, String keyHash) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+    public static String decrypt (String encryptedText, String keyHash) throws  NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+        byte[] bytes = Base64.getDecoder().decode(encryptedText);
         SecretKey key = new SecretKeySpec(MessageDigest.getInstance("SHA-256").digest(keyHash.getBytes(StandardCharsets.UTF_8)), "AES");
         Cipher cipher = Cipher.getInstance(alg);
         cipher.init(Cipher.DECRYPT_MODE, key, ivspec);
-        byte[] bytes = cipher.doFinal(encryptedText.getBytes(StandardCharsets.UTF_8));
-        String b64 = new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
-        return b64;
+        return new String(cipher.doFinal(bytes), StandardCharsets.UTF_8);
     }
 }
