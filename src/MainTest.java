@@ -16,5 +16,8 @@ public class MainTest {
         EncryptedP p3 = new EncryptedP("hashvalue","user","tag1","tag2");
         PwSafe test = new PwSafe(p1,p2,p3);
         test.writeSafe("safe.pw");*/
+
+
     }
 }
+
