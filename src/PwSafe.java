@@ -79,6 +79,28 @@ public class PwSafe {
         }
     }
 
+    public EncryptedP searchFor(String... args){
+        EncryptedP highestMatch = new EncryptedP("q","q","q");
+        int highestCounter = 0;
+        for (EncryptedP o:data) {
+            int counter = 0;
+            for (String x:o.tags) {
+                for (int i = 0; i < args.length; i++){
+                    if (args[i].equalsIgnoreCase(x)){
+                        counter++;
+                    }
+                }
+            }
+            if (counter > highestCounter){
+                highestMatch = o;
+            }
+        }
+        if (highestMatch.equals(new EncryptedP("q", "q", "q"))) {
+            return null;
+        }
+        return highestMatch;
+    }
+
     @Override
     public String toString() {
         return "PwSafe{" +
