@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.swing.*;
 import java.util.Objects;
 
 public class Main extends Application {
@@ -13,9 +14,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("view.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main.fxml")));
         Scene sc = new Scene(root);     //Scene
-        stage.initStyle(StageStyle.UNDECORATED);    //Stage
+
         //move around
         root.setOnMousePressed(evt -> {
             x = evt.getSceneX();
