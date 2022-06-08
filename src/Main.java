@@ -16,6 +16,7 @@ public class Main extends Application {
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main.fxml")));
         Scene sc = new Scene(root);     //Scene
+        stage.setTitle("Argos");
 
         //move around
         root.setOnMousePressed(evt -> {
